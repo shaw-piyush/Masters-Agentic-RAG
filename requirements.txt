@@ -1,0 +1,13 @@
+// Core LLM 
+langchain = 1.2.10
+langchain-google-genai = 4.2.1
+langchain-community = 0.4.1
+
+// Loaders
+pypdf = 6.8.0
+PyMuPDF = 1.27.2              // Either one is used
+langchain-text-splitters = 1.1.1
+
+// Vector DB
+chromadb = 1.5.5
+
