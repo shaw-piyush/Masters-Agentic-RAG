@@ -7,6 +7,18 @@ from app.rag.embedder import get_embeddings
 import pymupdf
 import chromadb
 
+import pymupdf4llm
+
+# def load_pdf_properly(data_dir: str = "./data/cleaned"):
+#     # Extracts text, tables, and handles headers properly
+#     md_text = pymupdf4llm.to_markdown(data_dir)
+     
+#     page_content=md_text,
+#     metadata={"source": data_dir}
+
+#     return page_content, metadata
+    
+
 def clean_data(data_dir : str = "./data/raw", op_dir : str = "./data/cleaned"):
 
     for filename in os.listdir(data_dir):
@@ -29,7 +41,7 @@ def clean_data(data_dir : str = "./data/raw", op_dir : str = "./data/cleaned"):
 # clean_data()
 
 
-def ingest_docs(data_dir : str = "./data/cleaned"):
+def ingest_docs(data_dir : str = "./data/raw"):
 
     loader = DirectoryLoader(data_dir, glob="**/*.pdf", loader_cls= PyMuPDFLoader)
 
@@ -41,6 +53,9 @@ def ingest_docs(data_dir : str = "./data/cleaned"):
     )
 
     chunks = text_splitter.split_documents(docs)
+
+    avg = sum(len(c.page_content) for c in chunks) / len(chunks)
+    print(f"Total chunks: {len(chunks)} | Avg chunk size: {avg:.0f} chars")
 
     stores = Chroma.from_documents(
         documents=chunks,
